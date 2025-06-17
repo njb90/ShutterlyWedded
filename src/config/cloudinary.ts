@@ -54,8 +54,19 @@ export const uploadToCloudinary = async (
 // Function to fetch all Shutterly Wedded images
 export const fetchGalleryImages = async (): Promise<any[]> => {
     try {
+        // Add cache-busting timestamp parameter
+        const timestamp = Date.now();
         const response = await fetch(
-            `https://res.cloudinary.com/${CLOUD_NAME}/image/list/wedding-gallery.json`
+            `https://res.cloudinary.com/${CLOUD_NAME}/image/list/wedding-gallery.json?_t=${timestamp}`,
+            {
+                // Disable browser caching
+                cache: 'no-cache',
+                headers: {
+                    'Cache-Control': 'no-cache, no-store, must-revalidate',
+                    'Pragma': 'no-cache',
+                    'Expires': '0'
+                }
+            }
         );
 
         if (!response.ok) {

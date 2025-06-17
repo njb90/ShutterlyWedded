@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Header } from "./components/Header";
 import { PhotoGallery } from "./components/PhotoGallery";
 import { PhotoUpload } from "./components/PhotoUpload";
+import { ToastContainer } from "./components/Toast";
 import { Photo } from "./types/Photo";
 import { getGalleryPhotos } from "./services/cloudinaryService";
+import { useToast } from "./hooks/useToast";
 import "./App.css";
 
 function App() {
@@ -13,6 +15,7 @@ function App() {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { toasts, removeToast, showSuccess, showError } = useToast();
 
   // Fetch photos from Cloudinary on app load
   useEffect(() => {
@@ -49,6 +52,10 @@ function App() {
       setPhotos(cloudinaryPhotos);
     } catch (err) {
       console.error("Error refreshing gallery:", err);
+      showError(
+        "Failed to refresh gallery",
+        "Please check your connection and try again"
+      );
       setError("Failed to refresh gallery.");
     } finally {
       setIsLoading(false);
@@ -110,9 +117,16 @@ function App() {
             )}
           </>
         ) : (
-          <PhotoUpload onPhotosUploaded={handlePhotosUploaded} />
+          <PhotoUpload
+            onPhotosUploaded={handlePhotosUploaded}
+            showSuccess={showSuccess}
+            showError={showError}
+          />
         )}
       </main>
+
+      {/* Toast Container */}
+      <ToastContainer toasts={toasts} onClose={removeToast} />
 
       <footer className="bg-gray-800 text-white py-8 mt-16">
         <div className="max-w-6xl mx-auto px-6 text-center">

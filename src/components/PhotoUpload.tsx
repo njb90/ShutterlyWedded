@@ -5,10 +5,14 @@ import { uploadPhotos } from "../services/cloudinaryService";
 
 interface PhotoUploadProps {
   onPhotosUploaded: (photos: Photo[]) => void;
+  showSuccess: (title: string, message?: string, duration?: number) => string;
+  showError: (title: string, message?: string, duration?: number) => string;
 }
 
 export const PhotoUpload: React.FC<PhotoUploadProps> = ({
   onPhotosUploaded,
+  showSuccess,
+  showError,
 }) => {
   const [isDragOver, setIsDragOver] = useState(false);
   const [uploaderName, setUploaderName] = useState("");
@@ -50,7 +54,10 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({
 
   const handleUpload = async () => {
     if (selectedFiles.length === 0 || !uploaderName.trim()) {
-      alert("Please add your name and select at least one photo");
+      showError(
+        "Missing information",
+        "Please add your name and select at least one photo"
+      );
       return;
     }
 
@@ -82,14 +89,16 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({
         fileInputRef.current.value = "";
       }
 
-      alert(
+      showSuccess(
+        "Upload successful!",
         `Successfully uploaded ${uploadedPhotos.length} photo${
           uploadedPhotos.length !== 1 ? "s" : ""
-        } to Cloudinary!`
+        } to Cloudinary`
       );
     } catch (error) {
       console.error("Upload error:", error);
-      alert(
+      showError(
+        "Upload failed",
         error instanceof Error
           ? error.message
           : "Failed to upload photos. Please try again."
