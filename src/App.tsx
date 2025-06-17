@@ -6,7 +6,6 @@ import { ToastContainer } from "./components/Toast";
 import { Photo } from "./types/Photo";
 import { getGalleryPhotos } from "./services/cloudinaryService";
 import { useToast } from "./hooks/useToast";
-import "./App.css";
 
 function App() {
   const [currentView, setCurrentView] = useState<"gallery" | "upload">(
