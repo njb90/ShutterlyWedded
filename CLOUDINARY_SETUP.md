@@ -8,7 +8,7 @@ Your Shutterly Wedded app has been successfully integrated with Cloudinary! This
 - Configured for unsigned uploads (client-side only)
 - Stores photos in `wedding-gallery` folder
 - Auto-tags photos with `wedding-gallery` and `user-upload`
-- Enables face detection, color analysis, and quality analysis
+- Enables automatic tagging and metadata storage
 - Preserves original filenames
 
 ✅ **Metadata Fields Created**:
@@ -58,7 +58,7 @@ REACT_APP_CLOUDINARY_UPLOAD_PRESET=wedding-gallery-upload
 - **Context Data**: Key-value pairs stored with each image
 - **Structured Metadata**: Searchable fields for advanced querying
 - **Tags**: Automatic tagging for categorization
-- **Analysis**: Face detection, color analysis, quality scores
+- **Optimization**: Automatic format conversion, quality optimization, responsive delivery
 
 ## Features Included
 

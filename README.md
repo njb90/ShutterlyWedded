@@ -11,7 +11,7 @@ A beautiful React application for sharing and viewing wedding photos. Shutterly 
 - 📱 **Responsive Design**: Works great on desktop, tablet, and mobile devices 
 - ☁️ **Cloud-Powered**: Images hosted and optimized by Cloudinary
 - 🚀 **Fast Loading**: Automatic image optimization and CDN delivery
-- 🏷️ **Smart Metadata**: Face detection, color analysis, and automatic tagging
+- 🏷️ **Smart Metadata**: Automatic tagging and custom metadata storage
 
 ## Technologies Used 
 - React 18 with TypeScript 
@@ -52,10 +52,6 @@ npm install
      - **Signing Mode**: `Unsigned`
      - **Folder**: `wedding-gallery`
      - **Tags**: `wedding-gallery,user-upload`
-     - **Face detection**: `Enabled`
-     - **Color analysis**: `Enabled`
-     - **Quality analysis**: `Enabled`
-
 ### 3. Environment Variables
 
 Create a `.env` file in the project root directory:
