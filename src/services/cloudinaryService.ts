@@ -4,6 +4,7 @@ import { uploadToCloudinary, fetchGalleryImages, getOptimizedImageUrl } from '..
 // Transform Cloudinary response to Photo interface
 export const transformCloudinaryToPhoto = (cloudinaryItem: any): Photo => {
     const context = cloudinaryItem.context.custom || {};
+    console.log(cloudinaryItem);
 
     return {
         id: cloudinaryItem.public_id,
@@ -19,10 +20,8 @@ export const transformCloudinaryToPhoto = (cloudinaryItem: any): Photo => {
             context: context,
             tags: cloudinaryItem.tags,
             created_at: cloudinaryItem.created_at,
-            format: cloudinaryItem.format,
             width: cloudinaryItem.width,
             height: cloudinaryItem.height,
-            bytes: cloudinaryItem.bytes,
         }
     };
 };

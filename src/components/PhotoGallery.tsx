@@ -20,12 +20,6 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos }) => {
     });
   };
 
-  const formatFileSize = (bytes?: number) => {
-    if (!bytes) return "Unknown";
-    const mb = bytes / (1024 * 1024);
-    return `${mb.toFixed(1)} MB`;
-  };
-
   const closeModal = () => {
     setSelectedPhoto(null);
   };
@@ -88,17 +82,6 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos }) => {
                   <Calendar className="h-4 w-4 mr-1 flex-shrink-0" />
                   <span>{photo.uploadDate.toLocaleDateString()}</span>
                 </div>
-                {photo.cloudinaryData?.format && (
-                  <div className="flex items-center text-xs text-gray-500 mt-1">
-                    <FileText className="h-3 w-3 mr-1" />
-                    <span>{photo.cloudinaryData.format.toUpperCase()}</span>
-                    {photo.cloudinaryData.bytes && (
-                      <span className="ml-1">
-                        • {formatFileSize(photo.cloudinaryData.bytes)}
-                      </span>
-                    )}
-                  </div>
-                )}
               </div>
             </div>
           ))}
@@ -163,38 +146,12 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos }) => {
                 </div>
                 {selectedPhoto.cloudinaryData && (
                   <div>
-                    <div className="text-sm text-gray-600 mb-1">
-                      <strong>Dimensions:</strong>{" "}
+                    <div className="text-sm text-gray-200 mb-1">
                       {selectedPhoto.cloudinaryData.width} ×{" "}
                       {selectedPhoto.cloudinaryData.height}
                     </div>
-                    <div className="text-sm text-gray-600 mb-1">
-                      <strong>Format:</strong>{" "}
-                      {selectedPhoto.cloudinaryData.format?.toUpperCase()}
-                    </div>
-                    <div className="text-sm text-gray-600 mb-1">
-                      <strong>File size:</strong>{" "}
-                      {formatFileSize(selectedPhoto.cloudinaryData.bytes)}
-                    </div>
-                    {selectedPhoto.publicId && (
-                      <div className="text-sm text-gray-600">
-                        <strong>Cloudinary ID:</strong> {selectedPhoto.publicId}
-                      </div>
-                    )}
                   </div>
                 )}
-              </div>
-              <div className="text-sm text-gray-500 border-t pt-3">
-                <div className="mb-1">
-                  <strong>Original filename:</strong> {selectedPhoto.fileName}
-                </div>
-                {selectedPhoto.cloudinaryData?.tags &&
-                  selectedPhoto.cloudinaryData.tags.length > 0 && (
-                    <div>
-                      <strong>Tags:</strong>{" "}
-                      {selectedPhoto.cloudinaryData.tags.join(", ")}
-                    </div>
-                  )}
               </div>
             </div>
           </div>
