@@ -13,9 +13,21 @@ function App() {
     "gallery"
   );
   const [photos, setPhotos] = useState<Photo[]>([]);
+  const [optimisticPhotos, setOptimisticPhotos] = useState<Photo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { toasts, removeToast, showSuccess, showError } = useToast();
+
+  // Helper to merge optimistic photos with API photos, deduplicating by publicId
+  const mergePhotos = (apiPhotos: Photo[], optimistic: Photo[]) => {
+    const apiIds = new Set(apiPhotos.map((p) => p.publicId || p.id));
+    // Only keep optimistic photos not present in API
+    const stillOptimistic = optimistic.filter(
+      (p) => !(p.publicId && apiIds.has(p.publicId))
+    );
+    // Prepend optimistic photos
+    return [...stillOptimistic, ...apiPhotos];
+  };
 
   // Fetch photos from Cloudinary on app load
   useEffect(() => {
@@ -24,7 +36,14 @@ function App() {
         setIsLoading(true);
         setError(null);
         const cloudinaryPhotos = await getGalleryPhotos();
-        setPhotos(cloudinaryPhotos);
+        setPhotos(mergePhotos(cloudinaryPhotos, optimisticPhotos));
+        // Remove any optimistic photos that are now present in API
+        setOptimisticPhotos((prev) =>
+          prev.filter(
+            (p) =>
+              !cloudinaryPhotos.some((apiP) => apiP.publicId === p.publicId)
+          )
+        );
       } catch (err) {
         console.error("Error loading photos:", err);
         setError(
@@ -36,20 +55,34 @@ function App() {
     };
 
     loadPhotos();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handlePhotosUploaded = (newPhotos: Photo[]) => {
     // Add new photos to the beginning of the array (most recent first)
     setPhotos((prevPhotos) => [...newPhotos, ...prevPhotos]);
+    setOptimisticPhotos((prev) => [...newPhotos, ...prev]); // Track as optimistic
     // Switch to gallery view to see the uploaded photos
     setCurrentView("gallery");
+    // Optionally: Remove optimistic photos after 90s if not confirmed by API
+    setTimeout(() => {
+      setOptimisticPhotos((prev) =>
+        prev.filter((p) => !photos.some((apiP) => apiP.publicId === p.publicId))
+      );
+    }, 90000);
   };
 
   const refreshGallery = async () => {
     try {
       setIsLoading(true);
       const cloudinaryPhotos = await getGalleryPhotos();
-      setPhotos(cloudinaryPhotos);
+      setPhotos(mergePhotos(cloudinaryPhotos, optimisticPhotos));
+      // Remove any optimistic photos that are now present in API
+      setOptimisticPhotos((prev) =>
+        prev.filter(
+          (p) => !cloudinaryPhotos.some((apiP) => apiP.publicId === p.publicId)
+        )
+      );
     } catch (err) {
       console.error("Error refreshing gallery:", err);
       showError(
