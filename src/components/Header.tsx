@@ -1,5 +1,7 @@
 import React from "react";
-import { Heart, Camera, RefreshCw } from "lucide-react";
+import { Image, Upload, RefreshCw } from "lucide-react";
+import { Button } from "./ui/button";
+import { NavigationMenu } from "./ui/navigation-menu";
 
 interface HeaderProps {
   currentView: "gallery" | "upload";
@@ -18,49 +20,41 @@ export const Header: React.FC<HeaderProps> = ({
     }
   };
 
-  return (
-    <header className="bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-lg">
-      <div className="max-w-6xl mx-auto px-6 py-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            <Heart className="h-8 w-8 mr-3" />
-            <h1 className="text-2xl font-bold">Shutterly Wedded</h1>
-          </div>
+  const navItems = [
+    {
+      label: "Gallery",
+      icon: <Image className="h-6 w-6" />,
+      onClick: () => onViewChange("gallery"),
+      active: currentView === "gallery",
+    },
+    {
+      label: "Upload",
+      icon: <Upload className="h-6 w-6" />,
+      onClick: () => onViewChange("upload"),
+      active: currentView === "upload",
+    },
+  ];
 
-          <nav className="flex space-x-4">
-            <button
-              onClick={() => onViewChange("gallery")}
-              className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
-                currentView === "gallery"
-                  ? "bg-white text-pink-600 font-semibold"
-                  : "hover:bg-pink-400"
-              }`}
-            >
-              <Heart className="h-4 w-4 mr-2" />
-              Gallery
-            </button>
-            <button
-              onClick={() => onViewChange("upload")}
-              className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
-                currentView === "upload"
-                  ? "bg-white text-pink-600 font-semibold"
-                  : "hover:bg-pink-400"
-              }`}
-            >
-              <Camera className="h-4 w-4 mr-2" />
-              Upload Photos
-            </button>
-            {currentView === "gallery" && onRefresh && (
-              <button
+  return (
+    <header className="bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-lg">
+      <div className="container mx-auto">
+        <div className="flex items-center justify-between">
+          <NavigationMenu
+            items={navItems}
+            className="bg-transparent border-none flex-1"
+          />
+          {currentView === "gallery" && onRefresh && (
+            <div className="px-6 py-4">
+              <Button
                 onClick={handleRefresh}
-                className="flex items-center px-4 py-2 rounded-lg transition-colors hover:bg-pink-400"
+                className="bg-white/20 hover:bg-white/30 text-white border-white/30"
                 title="Refresh gallery from Cloudinary"
               >
-                <RefreshCw className="h-4 w-4 mr-2" />
-                Refresh
-              </button>
-            )}
-          </nav>
+                <RefreshCw className="h-4 w-4 md:mr-2" />
+                <span className="hidden md:inline">Refresh</span>
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </header>

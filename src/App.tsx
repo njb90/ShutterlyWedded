@@ -162,7 +162,6 @@ function App() {
 
       <footer className="bg-gray-800 text-white py-8 mt-16">
         <div className="max-w-6xl mx-auto px-6 text-center">
-          <p className="text-lg mb-2">Sarah & Michael - January 15, 2024</p>
           <p className="text-gray-400 mb-2">
             Thank you for sharing in our special day and capturing these
             precious memories!
